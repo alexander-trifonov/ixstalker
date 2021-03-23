@@ -1,0 +1,8 @@
+
+"ixquarantine"
+{
+	"base" 			"helix"
+	"title" 		"Quarantine"
+	"author" 		"Mobious"
+	"menusystem"	"1"
+}
