@@ -7,4 +7,3 @@ PLUGIN.description = "Interactive flora with a life simulation"
 PLUGIN.readme = [[
 To do
 ]]
-
