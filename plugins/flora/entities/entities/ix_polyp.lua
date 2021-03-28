@@ -12,7 +12,8 @@ ENT.Sounds = {
     "npc/xen_polyp/idle03.wav",
     "npc/xen_polyp/idle04.wav"
 }
-ENT.LoopingSound = true
+ENT.LoopingSoundEnable = true
+ENT.LoopingVolume = 0.5
 ENT.item = "Polyp Core"
 
 

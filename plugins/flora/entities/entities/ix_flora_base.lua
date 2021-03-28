@@ -14,6 +14,12 @@ function ENT:SetupDataTables()
 	--self:NetworkVar("String", 0, "ItemID")
 end
 
+function ENT:PreInt()
+end
+
+function ENT:PostInt()
+end
+
 -- SERVER
 function ENT:Initialize()
 	-- Custom for specific species
@@ -23,7 +29,7 @@ function ENT:Initialize()
 		-- Common for all flora code
 		self.health = 50
 		self:SetModel(self.Model)
-		self:SetModelScale(self.ScaleSize, 0.1)
+		self:SetModelScale(self.ScaleSize, 0.01)
 		--self:SetSolid(SOLID_VPHYSICS)
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetPersistent(true)
@@ -35,6 +41,7 @@ function ENT:Initialize()
 			physObj:Wake()
 		end
 		self:LoopSounds()
+		self:Activate()
 	end
 
 	-- Custom for specific species
@@ -60,10 +67,10 @@ if (SERVER) then
 	end
 
 	function ENT:LoopSounds()
-		if (self.LoopingSound and IsValid(self)) then
+		if (self.LoopingSoundEnable and IsValid(self)) then
 			timer.Create(self:GetCreationID().."LoopingSound", 0,  0, function()
 				local sound = self.Sounds[math.random(#self.Sounds)]
-				self:EmitSound(sound, 65)
+				self:EmitSound(sound, (self.LoopingSoundLevel or 75), (self.LoopingPitch or 100), (self.LoopingVolume or 1))
 				timer.Adjust(self:GetCreationID().."LoopingSound", SoundDuration(sound) + math.random(3) + (self.LoopingSoundDelay or 0), nil, nil)
 			end)
 		end
@@ -94,6 +101,9 @@ if (SERVER) then
 			player:Notify("No space in the inventory!")
 			return false
 		end
+	end
+
+	function ENT:OnRemovePost()
 	end
 
 	function ENT:OnRemove()

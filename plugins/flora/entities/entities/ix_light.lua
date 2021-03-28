@@ -12,7 +12,10 @@ ENT.Sounds = {
     "npc/antlion/idle3.wav",
     "npc/antlion/idle4.wav"
 }
-ENT.LoopingSound = false
+ENT.LoopingPitch = 20
+ENT.LoopingSoundLevel = 50
+ENT.LoopingVolume = 1
+ENT.LoopingSoundEnable = true
 ENT.LoopingSoundDelay = 5
 
 
@@ -26,30 +29,37 @@ end
 
 
 function ENT:GoSleep()
-    self:EmitSound("npc/barnacle/barnacle_tongue_pull2.wav", 50)
-    self:SetAutomaticFrameAdvance(true)
-    self:ResetSequence("retract")
-    timer.Create(self:GetCreationID().."GoSleep", self:SequenceDuration("retract"), 1, function()
-        self.Think = self.oldThink
-        self:ResetSequence("hide")
-        self:SetAutomaticFrameAdvance(false)
-        self.Awake = false
-    end)
+    if (self.Awake) then
+        self:SetSkin(1)
+        self:EmitSound("npc/barnacle/barnacle_tongue_pull2.wav", 50)
+        self:SetAutomaticFrameAdvance(true)
+        self:ResetSequence("retract")
+        timer.Create(self:GetCreationID().."GoSleep", self:SequenceDuration("retract"), 1, function()
+            self.Think = self.oldThink
+            self:ResetSequence("hide")
+            self:SetAutomaticFrameAdvance(false)
+            self.Awake = false
+        end)
+    end
 end
 
 function ENT:WakeUp()
-    self:EmitSound("npc/barnacle/barnacle_tongue_pull1.wav", 50, 225)
-    self:SetAutomaticFrameAdvance(true)
-    self:SetSequence("deploy")
-    --self:SetPlaybackSpeed(0.5) -- doesn't work 
-    self.oldThink = self.Think
-    self.Think = function()  
-        self:NextThink(CurTime());  
-        return true;  
+    if (!self.Awake) then
+        self.Awake = true
+        self:EmitSound("npc/barnacle/barnacle_tongue_pull1.wav", 50, 225)
+        self:SetSkin(0)
+        self:SetAutomaticFrameAdvance(true)
+        self:SetSequence("deploy")
+        --self:SetPlaybackSpeed(0.5) -- doesn't work 
+        self.oldThink = self.Think
+        self.Think = function()  
+            self:NextThink(CurTime());  
+            return true;  
+        end
+        timer.Create(self:GetCreationID().."WakeUp", self:SequenceDuration("deploy"), 1, function()
+            self:ResetSequence("idle")
+        end)
     end
-    timer.Create(self:GetCreationID().."WakeUp", self:SequenceDuration("deploy"), 1, function()
-        self:ResetSequence("idle")
-    end)
 end
 
 if (SERVER) then
@@ -61,25 +71,32 @@ if (SERVER) then
         if (timer.Exists(self:GetCreationID().."GoSleep")) then
             timer.Remove(self:GetCreationID().."GoSleep")
         end
-
     end
 
     function ENT:StartTouch(activator)
-        self:WakeUp()
+        if (activator:IsPlayer()) then
+            self:WakeUp()
+        end
     end
 
     function ENT:EndTouch(activator)
-        self:GoSleep()
+        if (activator:IsPlayer()) then
+            self:GoSleep()
+        end
     end
 end 
 
 ENT.TriggerRadius = 60
 function ENT:PostInit()
     if (SERVER) then
+        --self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+        self:SetSkin(1)
         self:ResetSequence("hide")
         self:SetSolid(SOLID_BBOX)
         self:SetTrigger(true)
+        self:SetCollisionBounds(Vector(-5,-5,0),Vector(5,5,75))
         self:UseTriggerBounds(true, self.TriggerRadius)
+        --self:SetPos(self:GetPos() + self:GetUp() * Vector(1,1,-10)) --not working on SOLID_BBOX
     end
 end
 
