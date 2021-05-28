@@ -1,2 +1,8 @@
 
 *.sublime-*
+content/materials/models/props_unique/firepit_campground.vmt
+content/materials/models/props_unique/firepit_campground.vtf
+content/models/props_unique/firepit_campground.dx90.vtx
+content/models/props_unique/firepit_campground.mdl
+content/models/props_unique/firepit_campground.phy
+content/models/props_unique/firepit_campground.vvd
