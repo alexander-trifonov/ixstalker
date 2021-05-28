@@ -41,16 +41,16 @@ SWEP.UseHands = true
 SWEP.FireWhenLowered = true
 SWEP.HoldType = "fist"
 
-
-
+function SWEP:SetupDataTables()
+end
 
 function SWEP:Initialize()
-	--util.PrecacheModel("models/props_borealis/bluebarrel001.mdl")
 	self:SetHoldType(self.HoldType)
+
 	if (CLIENT) then
-		self.Data = self:GetOwner():GetNetVar("ixPlacementData");
-		--util.PrecacheModel(self.Data["Model"])
-		self.Ent = ents.CreateClientProp(self.Data["Model"])
+		local data = self:GetOwner():GetCharacter():GetData("ixPlacementData")
+		self.Data = data;
+		self.Ent = ents.CreateClientProp(self.Data.Model)
 		self.Ent:SetMaterial("models/debug/debugwhite")
 		self.Ent:SetColor(Color(255,255,255, 128))
 		self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
@@ -73,37 +73,39 @@ function SWEP:SecondaryAttack()
 	end
 end
 
-local function SpawnProp(entity)
-	if (CLIENT) then
-		net.Start("ixPlacementSpawnProp")
-		net.WriteString(entity:GetModel())
-		net.WriteVector(entity:GetPos())
-		net.WriteAngle(entity:GetAngles())
-		net.SendToServer()
-	end
+if (SERVER) then
+	util.AddNetworkString("ixPlacementSpawnEntity")
+	net.Receive("ixPlacementSpawnEntity", function(length, client)
+		local data = net.ReadTable();
+		if (data.ItemUniqueID) then
+			if (!client:CanPlaceEntity(data.ItemUniqueID)) then return end
+		end
+		local ent = ents.Create(data.Entity)
+		if (ent.SetData) then
+			ent:SetData(data)
+		else
+			PrintTable(data)
+			ent:SetPos(data.Pos)
+			ent:SetAngles(data.Angles)
+		end
+		ent:Spawn()
+		if (client:HasWeapon("ix_placement")) then
+			client:StripWeapon("ix_placement")
+		end
+		client:GetCharacter():GetInventory():Remove(data.ItemID)
+		ent:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1,3)..".wav")
+	end)
 end
 
-if (SERVER) then
-	util.AddNetworkString("ixPlacementSpawnProp")
-	net.Receive("ixPlacementSpawnProp", function(length, client)
-		local ent = ents.Create("prop_physics")
-		ent:SetModel(net.ReadString())
-		ent:SetPos(net.ReadVector())
-		ent:SetAngles(net.ReadAngle())
-		ent:Spawn()
-		ent:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1,3)..".wav")
-		local effectdata = EffectData()
-		effectdata:SetOrigin(ent:GetPos())
-		effectdata:SetEntity(ent)
-		util.Effect( "RagdollImpact", effectdata) -- a placeholder for better effects
-		-- timer.Create("ixPlacementSpawnProp"..ent:GetCreationID(), 0.7, 4, function()
-		-- 	if (IsValid(ent)) then
-		-- 		ent:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1,3)..".wav")
-		-- 	end
-		-- end)
-		client:StripWeapon("ix_placement")
-		--EmitSound(Sound("physics/cardboard/cardboard_box_impact_soft1.wav"), ent:GetPos(), 0)
-	end)
+function SWEP:SpawnEntity()
+	if (CLIENT) then
+		self.Data.Pos = self.Ent:GetPos()
+		self.Data.Angles = self.Ent:GetAngles()
+		net.Start("ixPlacementSpawnEntity")
+		net.WriteTable(self.Data)
+		net.SendToServer()
+		self.Ent:Remove()
+	end
 end
 
 function SWEP:Think()
@@ -115,8 +117,7 @@ function SWEP:Think()
 	if (CLIENT) then
 		if (IsValid(self.Ent)) then
 			if (input.IsKeyDown(KEY_E)) then
-				SpawnProp(self.Ent)
-				self.Ent:Remove()
+				self:SpawnEntity()
 			end
 			local pos = self:GetOwner():GetEyeTrace().HitPos
 			pos.z = pos.z - self.MinOffset.z

@@ -9,13 +9,18 @@ ix.placement = ix.placement or {}
 
 function ix.placement.PlaceEntity(client, data)
     local data = data or {};
-    data.Model = "models/props_c17/FurnitureCouch001a.mdl";
-    client:SetNetVar("ixPlacementData", data);
+    data.Entity = data.Entity or "ix_placeable"
+    client:GetCharacter():SetData("ixPlacementData", data);
     client:Give("ix_placement");
     client:SelectWeapon("ix_placement")
 end
 
 do
+    local playerMeta = FindMetaTable("Player")
+    function playerMeta:CanPlaceEntity(ItemUniqueID)
+        return self:GetCharacter():GetInventory():HasItem(ItemUniqueID)      
+    end
+
     ix.command.Add("placeEntity", {
         description = "Place entity",
         superAdminOnly = true,
