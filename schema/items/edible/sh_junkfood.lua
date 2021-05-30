@@ -1,5 +1,5 @@
 ITEM.name = "Junkfood"
---ITEM.base = "Weapons"
+ITEM.base = "base_edible"
 ITEM.model = Model("models/props_junk/garbage_metalcan002a.mdl")
 ITEM.description = "Something edible"
 ITEM.category = "Consumables"
