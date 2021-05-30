@@ -50,7 +50,11 @@ function SWEP:Initialize()
 	if (CLIENT) then
 		local data = self:GetOwner():GetCharacter():GetData("ixPlacementData")
 		self.Data = data;
-		self.Ent = ents.CreateClientProp(self.Data.Model)
+		--util.PrecacheModel(self.Data.Model);
+		-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
+		-- DO THIS:
+		self.Ent = ents.CreateClientProp()
+		self.Ent:SetModel(self.Data.Model)
 		self.Ent:SetMaterial("models/debug/debugwhite")
 		self.Ent:SetColor(Color(255,255,255, 128))
 		self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
@@ -119,9 +123,7 @@ function SWEP:Think()
 			if (input.IsKeyDown(KEY_E)) then
 				self:SpawnEntity()
 			end
-			local pos = self:GetOwner():GetEyeTrace().HitPos
-			pos.z = pos.z - self.MinOffset.z
-			self.Ent:SetPos(pos);
+			self.Ent:SetPos(self:GetOwner():GetEyeTrace().HitPos - Vector(0, 0, self.Ent:GetCollisionBounds().z));
 			self.Ent:SetAngles(self.Angles)
 		end
 	end
