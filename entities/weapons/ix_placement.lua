@@ -123,9 +123,7 @@ function SWEP:Think()
 			if (input.IsKeyDown(KEY_E)) then
 				self:SpawnEntity()
 			end
-			local pos = self:GetOwner():GetEyeTrace().HitPos
-			pos.z = pos.z - self.MinOffset.z
-			self.Ent:SetPos(self:GetOwner():GetEyeTrace().HitPos  + Vector(0, 0, self.Ent:GetCollisionBounds().z));
+			self.Ent:SetPos(self:GetOwner():GetEyeTrace().HitPos - Vector(0, 0, self.Ent:GetCollisionBounds().z));
 			self.Ent:SetAngles(self.Angles)
 		end
 	end
