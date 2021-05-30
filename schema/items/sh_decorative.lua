@@ -13,7 +13,7 @@ ITEM.functions.Place = {
 		local client = item.player
         local data = {};
 		data.Entity = "ix_placeable"
-        data.Model = "models/props_c17/FurnitureDrawer001a.mdl"
+        data.Model = "models/props_c17/FurnitureCouch002a.mdl"
 		data.ItemID = item:GetID() -- ID of instance in the inventory
 		data.ItemUniqueID = item.uniqueID -- general ID, a name, "decorative" in this case
 		ix.placement.PlaceEntity(client, data)
