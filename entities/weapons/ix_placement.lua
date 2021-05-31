@@ -88,7 +88,6 @@ if (SERVER) then
 		if (ent.SetData) then
 			ent:SetData(data)
 		else
-			PrintTable(data)
 			ent:SetPos(data.Pos)
 			ent:SetAngles(data.Angles)
 		end
