@@ -17,30 +17,72 @@ you cannot use penis jokes without penis permissions
 styles = {
     ["bandit"] = {
         ["laugh"] = {
-            "wav"
+            "bandit/talk/laugh/laughter_1.ogg.mp3",
+            "bandit/talk/laugh/laughter_2.ogg.mp3",
+            "bandit/talk/laugh/laughter_3.ogg.mp3",
+            "bandit/talk/laugh/laughter_4.ogg.mp3",
+            "bandit/talk/laugh/laughter_5.ogg.mp3",
+            "bandit/talk/laugh/laughter_6.ogg.mp3",
+            "bandit/talk/laugh/laughter_7.ogg.mp3"
         },
-        ["reaction"] = {
-            "wav"
+        ["jokeReactionBad"] = {
+            "bandit/talk/reaction/reaction_joke_1.ogg.mp3",
+            "bandit/talk/reaction/reaction_joke_2.ogg.mp3",
+            "bandit/talk/reaction/reaction_joke_3.ogg.mp3"
         },
         ["joke"] = {
-            "sound/bandit/talk/jokes/joke_1.mp3"
+            "bandit/talk/jokes/joke_1.ogg.mp3",
+            "bandit/talk/jokes/joke_2.ogg.mp3",
+            "bandit/talk/jokes/joke_3.ogg.mp3",
+            "bandit/talk/jokes/joke_4.ogg.mp3",
+            "bandit/talk/jokes/joke_5.ogg.mp3",
+            "bandit/talk/jokes/joke_6.ogg.mp3",
+            "bandit/talk/jokes/joke_7.ogg.mp3",
+            "bandit/talk/jokes/joke_8.ogg.mp3",
+            "bandit/talk/jokes/joke_9.ogg.mp3",
+            "bandit/talk/jokes/joke_10.ogg.mp3",
+            "bandit/talk/jokes/joke_11.ogg.mp3"
         },
         ["jokeIntro"] = {
-            "wav"
+            "bandit/talk/intros/intro_joke_1.ogg.mp3",
+            "bandit/talk/intros/intro_joke_2.ogg.mp3",
+            "bandit/talk/intros/intro_joke_3.ogg.mp3",
+            "bandit/talk/intros/intro_joke_4.ogg.mp3",
+            "bandit/talk/intros/intro_joke_5.ogg.mp3"
         }
     },
     ["stalker"] = {
         ["laugh"] = {
-            "wav"
+            "stalker/talk/laugh/laughter_1.ogg.mp3",
+            "stalker/talk/laugh/laughter_2.ogg.mp3",
+            "stalker/talk/laugh/laughter_3.ogg.mp3",
+            "stalker/talk/laugh/laughter_4.ogg.mp3",
+            "stalker/talk/laugh/laughter_5.ogg.mp3",
+            "stalker/talk/laugh/laughter_6.ogg.mp3"
         },
-        ["reaction"] = {
-            "wav"
+        ["jokeReactionBad"] = {
+            "stalker/talk/reaction/reaction_joke_1.ogg.mp3",
+            "stalker/talk/reaction/reaction_joke_2.ogg.mp3"
         },
         ["joke"] = {
-            "wav"
+            "stalker/talk/jokes/joke_1.ogg.mp3",
+            "stalker/talk/jokes/joke_2.ogg.mp3",
+            "stalker/talk/jokes/joke_3.ogg.mp3",
+            "stalker/talk/jokes/joke_4.ogg.mp3",
+            "stalker/talk/jokes/joke_5.ogg.mp3",
+            "stalker/talk/jokes/joke_6.ogg.mp3",
+            "stalker/talk/jokes/joke_7.ogg.mp3",
+            "stalker/talk/jokes/joke_8.ogg.mp3",
+            "stalker/talk/jokes/joke_9.ogg.mp3",
+            "stalker/talk/jokes/joke_10.ogg.mp3",
+            "stalker/talk/jokes/joke_11.ogg.mp3",
+            "stalker/talk/jokes/joke_12.ogg.mp3"
         },
         ["jokeIntro"] = {
-            "wav"
+            "stalker/talk/intros/intro_joke_1.ogg.mp3",
+            "stalker/talk/intros/intro_joke_2.ogg.mp3",
+            "stalker/talk/intros/intro_joke_3.ogg.mp3",
+            "stalker/talk/intros/intro_joke_4.ogg.mp3"
         }
     }
 }
@@ -49,18 +91,19 @@ ix.command.Add("joke", {
 	description = "Tell a joke to nearby stalkers",
 	superAdminOnly = true,
 	arguments = {
-		ix.type.string
+		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
         if ((style == nil) or (styles[style] == nil)) then
             local string = "Use /joke "
             for k,v in pairs(styles) do
-                string = string..k.."|"
+                string = string..k.." | "
             end
             return string
 		end
-        client:EmitSound(styles[style].jokeIntro[math.random(1, #styles[style].jokeIntro)])
-        timer.Simple(2, function()
+        local intro = Sound(styles[style].jokeIntro[math.random(1, #styles[style].jokeIntro)])
+        client:EmitSound(intro)
+        timer.Simple(NewSoundDuration(intro), function()
             local sound = Sound(styles[style].joke[math.random(1, #styles[style].joke)])
             client:EmitSound(sound)
             -- SoundDuration not working on ogg
@@ -85,17 +128,17 @@ ix.command.Add("laugh", {
 	description = "Laugh with or at someone",
 	superAdminOnly = true,
 	arguments = {
-		ix.type.string
+		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
-		if ((style == nil) or (!IsValid(styles.style))) then
+		if ((style == nil) or (styles[style] == nil)) then
             local string = "/laugh "
-            for k,v in styles do
-                string = string..k.."/"
+            for k,v in pairs(styles) do
+                string = string..k.." | "
             end
             return string
 		end
-        client:EmitSound(styles.style.laugh[math.random(1, #styles.style.laugh)])
+        client:EmitSound(styles[style].laugh[math.random(1, #styles[style].laugh)])
 	end
 })
 
@@ -103,16 +146,16 @@ ix.command.Add("react", {
 	description = "React at bad joke",
 	superAdminOnly = true,
 	arguments = {
-		ix.type.string
+		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
-		if ((style == nil) or (!IsValid(styles.style))) then
+		if ((style == nil) or (styles[style] == nil)) then
             local string = "/react "
-            for k,v in styles do
-                string = string..k.."/"
+            for k,v in pairs(styles) do
+                string = string..k.." | "
             end
             return string
 		end
-        client:EmitSound(styles.style.react[math.random(1, #styles.style.react)])
+        client:EmitSound(styles[style].jokeReactionBad[math.random(1, #styles[style].jokeReactionBad)])
 	end
 })
