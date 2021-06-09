@@ -102,16 +102,20 @@ ix.command.Add("joke", {
             return string
 		end
         local intro = Sound(styles[style].jokeIntro[math.random(1, #styles[style].jokeIntro)])
-        client:EmitSound(intro)
+        local introID = ix.playsound.Play(client, intro)
+
+        local sound = Sound(styles[style].joke[math.random(1, #styles[style].joke)])
         timer.Simple(NewSoundDuration(intro), function()
-            local sound = Sound(styles[style].joke[math.random(1, #styles[style].joke)])
-            client:EmitSound(sound)
-            -- SoundDuration not working on ogg
-            -- Not working on mp3 either, tried  ffmpeg
-            -- Todo: convert all ogg to wav/mp3
-            -- mp3 works, but use NewSoundDuration
-            print(NewSoundDuration(sound))
+            -- if new sound is playing, don't play the music
+            if (introID != client:GetData("soundID")) then
+                return false
+            end
+            local soundID = ix.playsound.Play(client, sound)
+
             timer.Simple(NewSoundDuration(sound), function()
+                if (soundID != client:GetData("soundID")) then
+                    return false
+                end
                 local entities = ents.FindInSphere(client:GetPos(), 250)
                 for k,v in pairs(entities) do
                     if (v:IsPlayer()) then
@@ -138,7 +142,8 @@ ix.command.Add("laugh", {
             end
             return string
 		end
-        client:EmitSound(styles[style].laugh[math.random(1, #styles[style].laugh)])
+        local sound = styles[style].laugh[math.random(1, #styles[style].laugh)]
+        ix.playsound.Play(client, sound)
 	end
 })
 
@@ -156,6 +161,7 @@ ix.command.Add("react", {
             end
             return string
 		end
-        client:EmitSound(styles[style].jokeReactionBad[math.random(1, #styles[style].jokeReactionBad)])
+        local sound = styles[style].jokeReactionBad[math.random(1, #styles[style].jokeReactionBad)]
+        ix.playsound.Play(client, sound)
 	end
 })

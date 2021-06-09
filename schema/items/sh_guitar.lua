@@ -78,9 +78,7 @@ ITEM.functions.BackToInventory = {
 	OnRun = function(item)
 		local client = item.player
         local ent = item:GetData("ent")
-        if (client:GetData("sound")) then
-            client:StopSound(client:GetData("sound"))
-        end 
+        ix.playsound.Stop(client)
         if (IsValid(ent)) then
             ent:Remove()
             client:EmitSound(Sound("physics/cardboard/cardboard_box_impact_soft4.wav"))
@@ -101,6 +99,15 @@ if (SERVER) then
         PrintTable(data)
         --data.item:PlayMusic(client, "stalker", data.name)
     end)
+
+    hook.Add("ixStopSound", "ixStopGuitar", function(client)
+        if (client:GetData("sound")) then
+            client:StopSound(client:GetData("sound"))
+            -- for k,v in pairs(client:GetData("soundTimers")) do
+            --     timer.Remove(v)
+            -- end
+        end
+    end)
 end
 
 if (SERVER) then
@@ -111,17 +118,22 @@ if (SERVER) then
         if (styles[style] == nil) or (music[genre] == nil) then
             return false
         end
-        if (client:GetData("sound")) then
-            client:StopSound(client:GetData("sound"))
-        end
+
         local intro = Sound(styles[style].intro[math.random(1, #styles[style].intro)])
-        client:EmitSound(intro)
-        client:SetData("sound", intro)
+        local introID = ix.playsound.Play(client, intro)
+
+        local sound = Sound(music[genre][math.random(1, #music[genre])])
         timer.Simple(NewSoundDuration(intro), function()
-            local sound = Sound(music[genre][math.random(1, #music[genre])])
-            client:EmitSound(sound)
-            client:SetData("sound", sound)
+            -- if new sound is playing, don't play the music
+            if (introID != client:GetData("soundID")) then
+                return false
+            end
+            local soundID = ix.playsound.Play(client, sound)
+            -- notify players around that they heard a good music
             timer.Simple(NewSoundDuration(sound), function()
+                if (soundID != client:GetData("soundID")) then
+                    return false
+                end
                 local entities = ents.FindInSphere(client:GetPos(), 250)
                 for k,v in pairs(entities) do
                     if (v:IsPlayer()) then
@@ -183,9 +195,7 @@ ITEM.postHooks.drop = function(item, result)
         item:SetData("ent", nil)
     end
     local client = item.player
-    if (client:GetData("sound")) then
-        client:StopSound(client:GetData("sound"))
-    end
+    ix.playsound.Stop(client)
     ix.gestures.Play(item.player, "idlenoise", true)
 end
     
