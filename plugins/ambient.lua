@@ -33,7 +33,6 @@ if (CLIENT) then
 
     function playerMeta:StopAmbient()
         if (self.ambient != nil) then
-            --self.ambient:FadeOut(1.5)
             self.ambient:Stop()
             self.ambient = nil
             self.ambientID = nil
@@ -54,9 +53,7 @@ if (CLIENT) then
                 return false
             end
         end
-        -- if (self.ambientID != ambientID) then
-        --     return false
-        -- end
+
         self.ambient:Play()
         -- Play next
         timer.Simple(NewSoundDuration(sound) + delay, function()
@@ -68,11 +65,8 @@ if (CLIENT) then
             if (self.ambientID != ambientID) then
                 return false
             end
-            --self:StopAmbient()
             hook.Run("PlayAmbientMusic", genre, forced, delay)
         end)
-        -- timer.Simple(5, function()
-        -- end)
     end
 end
 
