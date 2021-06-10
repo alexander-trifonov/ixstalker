@@ -24,11 +24,22 @@ function PANEL:Populate(items)
 		self.index:Dock(TOP)
 		self.index:SetHeight(64)
 		self.index:DockMargin(20, 20, 20, 0)
+		self.index:InvalidateParent(true)
 
 		self.index.leftPanel = self.index:Add("DPanel")
 		self.index.leftPanel:Dock(LEFT)
 		self.index.leftPanel:SetSize(300, 0)
+		self.index.leftPanel:InvalidateParent(true)
 
+		self.index.category = self.index.leftPanel:Add("DLabel")
+		self.index.category:SetText("Category: "..item.category)
+		self.index.category:Dock(LEFT)
+		self.index.category:SetFont("ixGenericFont")
+		self.index.category:DockMargin(0, 0, 0, 0)
+		self.index.category:InvalidateParent(true)
+		self.index.category:SetWide(80)
+		self.index.category:SetWrap(true)
+		
 		self.index.title = self.index.leftPanel:Add("DLabel")
 		self.index.title:SetText(item.title)
 		self.index.title:Dock(TOP)
@@ -42,11 +53,13 @@ function PANEL:Populate(items)
 		self.index.update:SetFont("ixGenericFont")
 		self.index.update:DockMargin(10, 10, 0, 0)
 
-		self.index.rarity = self.index.leftPanel:Add("DLabel")
-		self.index.rarity:SetText(item.rarity .. "%")
-		self.index.rarity:Dock(RIGHT)
-		self.index.rarity:SetFont("ixMediumFont")
-		self.index.rarity:DockMargin(0, -60, 0, 0)
+
+		-- self.index.rarity = self.index.leftPanel:Add("DLabel")
+		-- self.index.rarity:SetText(item.category .. "%")
+		-- self.index.rarity:Dock(RIGHT)
+		-- self.index.rarity:SetFont("ixMediumFont")
+		-- self.index.rarity:DockMargin(0, -60, 0, 0)
+
 
 		self.index.avatar = vgui.Create("AvatarImage", self.index)
 		self.index.avatar:SetSize(64, 64)
@@ -64,15 +77,15 @@ function PANEL:Populate(items)
 		self.index.delete.Paint = function(self, w, h)
 		end
 
-		self.index.edit = vgui.Create("DButton", self.index)
-		self.index.edit:Dock(RIGHT)
-		self.index.edit:SetText("Edit")
-		self.index.edit.DoClick = function()
-			self.editor = vgui.Create("ixItemSpawnerEditor")
-			self.editor:Setup(item)
-		end
-		self.index.edit.Paint = function(self, w, h)
-		end
+		-- self.index.edit = vgui.Create("DButton", self.index)
+		-- self.index.edit:Dock(RIGHT)
+		-- self.index.edit:SetText("Edit")
+		-- self.index.edit.DoClick = function()
+		-- 	self.editor = vgui.Create("ixItemSpawnerEditor")
+		-- 	self.editor:Setup(item)
+		-- end
+		-- self.index.edit.Paint = function(self, w, h)
+		-- end
 
 		self.index.teleport = vgui.Create("DButton", self.index)
 		self.index.teleport:Dock(RIGHT)
