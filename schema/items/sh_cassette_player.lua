@@ -7,37 +7,37 @@ ITEM.height = 1
 
 ambient = ambient or {}
 ambient.cassette = {
-    "cassette_test/dontcry.mp3",
-    "cassette_test/juarvleva1.mp3",
-    "cassette_test/kino1.mp3",
-    "cassette_test/kino2.mp3",
-    "cassette_test/kino3.mp3",
-    "cassette_test/kino4.mp3",
-    "cassette_test/kino5.mp3",
-    "cassette_test/kipelov1.mp3",
-    "cassette_test/kipelov2.mp3",
-    "cassette_test/komissar1.mp3",
-    "cassette_test/lumen1.mp3",
-    "cassette_test/miraj1.mp3",
-    "cassette_test/miraj2.mp3",
-    "cassette_test/molodoy.mp3",
-    "cassette_test/splin1.mp3",
-    "cassette_test/mgsv1.mp3",
-    "cassette_test/eagles1.mp3",
-    "cassette_test/kino7.mp3",
-    "cassette_test/korneluk1.mp3",
-    "cassette_test/kino6.mp3"
+    "cassette/dontcry.mp3",
+    "cassette/juarvleva1.mp3",
+    "cassette/kino1.mp3",
+    "cassette/kino2.mp3",
+    "cassette/kino3.mp3",
+    "cassette/kino4.mp3",
+    "cassette/kino5.mp3",
+    "cassette/kipelov1.mp3",
+    "cassette/kipelov2.mp3",
+    "cassette/komissar1.mp3",
+    "cassette/lumen1.mp3",
+    "cassette/miraj1.mp3",
+    "cassette/miraj2.mp3",
+    "cassette/molodoy.mp3",
+    "cassette/splin1.mp3",
+    "cassette/mgsv1.mp3",
+    "cassette/eagles1.mp3",
+    "cassette/kino7.mp3",
+    "cassette/korneluk1.mp3",
+    "cassette/kino6.mp3"
 }
 if (SERVER) then
     util.AddNetworkString("ixPlayCassette")
     util.AddNetworkString("ixStopCassette")
 else
     net.Receive("ixPlayCassette", function()
-        hook.Run("PlayAmbientMusic", "cassette", true)    
+        hook.Run("PlayAmbientMusic", "cassette", true, 0)    
     end)
     net.Receive("ixStopCassette", function()
         hook.Run("StopAmbientMusic")
-        hook.Run("PlayAmbientMusic", "normal")
+        hook.Run("PlayAmbientMusic", "normal") -- launch a normal ambient
     end)
 end
 
@@ -69,7 +69,7 @@ ITEM.functions.Next = {
 
 ITEM.functions.Stop = {
     name = "Выключить",
-    sound = "cassette/cassette-out-1.mp3",
+    sound = "cassette/cassette-eject-1.mp3",
 	OnRun = function(item)
         net.Start("ixStopCassette")
         net.Send(item:GetOwner())

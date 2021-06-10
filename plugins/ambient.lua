@@ -1,11 +1,14 @@
 PLUGIN.name = "Ambient"
 PLUGIN.author = "Mobious"
 PLUGIN.description = "Plays the penis music in background"
+-- How moral healthy people codes: creates one library, responsible for playing sound
+-- How mobious is doing: create a playsound library for entity's sounds and a fucking plugin for ambient sound
+
 
 ambient = ambient or {}
 ambient.normal = {
-    --"stalker/talk/intros/intro_music_1.ogg.mp3"
-    "music/hl1_song14.mp3"
+    "stalker/talk/intros/intro_music_1.ogg.mp3"
+    --"music/hl1_song14.mp3"
 }
 
 ix.lang.AddTable("english", {
@@ -37,7 +40,11 @@ if (CLIENT) then
         end
     end
 
-    function playerMeta:PlayAmbient(sound, genre, forced)
+    -- sound - path to sound to play
+    -- genre - a genre in 'ambient' table
+    -- forced - ignore settings for disabling ambient music
+    -- delay - a delay between tracks
+    function playerMeta:PlayAmbient(sound, genre, forced, delay)
         self:StopAmbient()
         self.ambient = CreateSound(self, sound)
         local ambientID = sound..math.random(1, 1000)
@@ -52,8 +59,7 @@ if (CLIENT) then
         -- end
         self.ambient:Play()
         -- Play next
-        timer.Simple(NewSoundDuration(sound), function()
-            print(NewSoundDuration(sound))
+        timer.Simple(NewSoundDuration(sound) + delay, function()
             if (!forced) then
                 if (ix.option.Get("enableAmbientMusic") == false) then
                     return false
@@ -63,7 +69,7 @@ if (CLIENT) then
                 return false
             end
             --self:StopAmbient()
-            hook.Run("PlayAmbientMusic", genre, forced)
+            hook.Run("PlayAmbientMusic", genre, forced, delay)
         end)
         -- timer.Simple(5, function()
         -- end)
@@ -71,14 +77,15 @@ if (CLIENT) then
 end
 
 if (CLIENT) then
-    function PLUGIN:PlayAmbientMusic(genre, forced)
-        forced = forced or false
+    function PLUGIN:PlayAmbientMusic(genre, forced, delay)
         genre = genre or "normal"
+        forced = forced or false
+        delay = delay or 20
         local client = LocalPlayer()
         if (ambient[genre] == nil) then return false end
         
         local sound = ambient[genre][math.random(1, #ambient[genre])]
-        client:PlayAmbient(sound, genre, forced)
+        client:PlayAmbient(sound, genre, forced, delay)
     end
 
     function PLUGIN:StopAmbientMusic()
