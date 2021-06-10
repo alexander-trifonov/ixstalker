@@ -34,11 +34,29 @@ ITEM.functions.Open = {
         item.searchTime = NewSoundDuration(sound)
         client:EmitSound(sound)
         client:SetAction("Открытие...", item.searchTime)
+        item.openingTimer = "ixItemTimer"..item:GetEntity():GetCreationID()
+        local phys = item:GetEntity():GetPhysicsObject()
+        local mass = phys:GetMass() 
+        timer.Create(item.openingTimer, item.searchTime/4, 0, function()
+            if (!IsValid(item:GetEntity())) then
+                timer.Remove(item.openingTimer)
+                return
+            end
+            item:GetEntity():EmitSound("physics/wood/wood_crate_impact_hard"..math.random(1,5)..".wav")
+            local force = Vector(0, 0, mass * (10 + 50))
+            local offset = (item:GetEntity():GetPos() + Vector(math.random(-1,1) * 5, 4, 0))
+            phys:ApplyForceOffset(force, offset)
+        end)
         client:DoStaredAction(item:GetEntity(), 
             function()
                 client:Notify("You have opened the box")
                 local uid = item.items[math.random(1, #item.items)]
-                ix.item.Spawn(uid, item:GetEntity():GetPos() + Vector(0, 0, 10))
+                ix.item.Spawn(uid, item:GetEntity():GetPos() + Vector(0, 0, 10), function(item_after, entity)
+                    local phys = entity:GetPhysicsObject()
+                    local force = Vector(0, 0,  phys:GetMass() * (10 + 150))
+                    phys:ApplyForceCenter(force)
+                end)
+                item:GetEntity():EmitSound("physics/wood/wood_crate_impact_hard"..math.random(1,5)..".wav")
                 item:GetEntity():Remove()
                 item:SetData("receiver", nil)
                 return true;
@@ -49,6 +67,7 @@ ITEM.functions.Open = {
                 client:SetAction()
                 item:SetData("receiver", nil)
                 client:StopSound(sound)
+                timer.Remove(item.openingTimer)
                 return false
             end)
         return false
