@@ -44,7 +44,7 @@ ITEM.functions.Open = {
             end
             item:GetEntity():EmitSound("physics/wood/wood_crate_impact_hard"..math.random(1,5)..".wav")
             local force = Vector(0, 0, mass * (10 + 50))
-            local offset = (item:GetEntity():GetPos() + Vector(math.random(-1,1) * 5, 4, 0))
+            local offset = (item:GetEntity():GetPos() + Vector(math.random(-1,1) * 5, math.random(-1,1) * 4, 0))
             phys:ApplyForceOffset(force, offset)
         end)
         client:DoStaredAction(item:GetEntity(), 
