@@ -27,6 +27,25 @@ function PLUGIN:itemGetPrice(uniqueID, selling, client, price)
 end
 
 
+-- Since I can't identify what item is actually gonna be sold and modify the price by it's durability, I'll disallow selling damaged items at all
+function PLUGIN:CanPlayerTradeWithVendor(client, entity, uniqueID, isSellingToVendor)
+    if (SERVER) then
+        if (isSellingToVendor) then
+            for _, v in pairs(client:GetCharacter():GetInventory():GetItems()) do
+                if (v.uniqueID == uniqueID and v:GetID() != 0 and ix.item.instances[v:GetID()] and v:GetData("equip", false) == false) then
+                    if (v:GetData("durability")) then
+                        if (v:GetData("durability") != 100) then
+                            client:Notify("В вашем инвентаре есть такой предмет с не максимальной прочностью")
+                            return false
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+
 -- Add this to ix.vendor.lua:
 -- function ENT:GetPrice(uniqueID, selling)
 --      ...
