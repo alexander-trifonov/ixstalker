@@ -40,6 +40,9 @@ ITEM.functions.combine = {
 	end,
     OnCanRun = function(item, data)
         local other_item = ix.item.instances[data[1]]
+        if (other_item.category != "Weapons") then
+            return false
+        end
         local durability = other_item:GetData("durability")
         return (durability != nil) and (durability <= 100)
     end
