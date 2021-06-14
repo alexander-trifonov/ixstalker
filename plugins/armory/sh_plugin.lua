@@ -17,7 +17,7 @@ function PLUGIN:EntityTakeDamage(entity, dmgInfo)
     if (entity:IsPlayer()) then
         local client = entity
         local char = client:GetCharacter()
-        local items = char:GetInventory():GetItems()
+        --local items = char:GetInventory():GetItems()
         local armor = char:GetInventory():HasItemOfBase("base_outfit", {
             ["equip"] = true,
             ["outfitCategory"] = "model" -- main armor
