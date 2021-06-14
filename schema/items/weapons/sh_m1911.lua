@@ -3,6 +3,7 @@ ITEM.description = "Второстепенное оружие американс
 ITEM.class = "arccw_mifl_fas2_m1911"
 ITEM.weaponCategory = "sidearm"
 ITEM.durability = 100
+ITEM.uniqueID = "m1911"
 
 ITEM.model = "models/weapons/arccw/mifl/fas2/c_m1911.mdl"
 ITEM.width = 1
@@ -15,18 +16,7 @@ ITEM.iconCam = {
 }
 
 
-function ITEM:OnInstanced(index, x, y, item)
-    self:SetData("durability", self:GetData("durability") or self.durability or 66)
-end
-
--- if (CLIENT) then
---     function ITEM:PopulateTooltip(tooltip)
---         if (self.durability) then
---             local durability = tooltip:AddRow("durability")
---             local text = ((self.durabilityDesc) or ("Осталось прочности: "))..(self:GetData("durability") or self.durability)
---             durability:SetColor(Color(60, 150, 60))
---             durability:SetText(text or "")
---             durability:SizeToContents()
---         end
---     end
+-- function ITEM:OnInstanced(index, x, y, item)
+--     self:SetData("durability", self:GetData("durability") or self.durability or 66)
+-- 	self:SetData("class", self.class)
 -- end
