@@ -11,5 +11,10 @@
 -- L("serverWelcome", "John Lua") would return a string with the text "Welcome to the server, John Lua!".
 
 LANGUAGE = {
-	serverWelcome = "Welcome to the server, %s!"
+	icFormat = "\n\t%s",
+    wFormat = "\n\tшепчет: \"%s\"",
+    rollFormat = "%s выбрасывает число %s",
+    yFormat = "\n\tкричит: \"%s\"",
+    meFormat = "\n **%s**",
+    pmFormat = "\n[PDA]: %s"
 }

@@ -94,6 +94,9 @@ ix.command.Add("joke", {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
+        if (client:IsFemale()) then
+            return "Для девушек эта функция недоступна"
+        end
         if ((style == nil) or (styles[style] == nil)) then
             local string = "Use /joke "
             for k,v in pairs(styles) do
@@ -135,6 +138,9 @@ ix.command.Add("laugh", {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
+        if (client:IsFemale()) then
+            return "Для девушек эта функция недоступна"
+        end
 		if ((style == nil) or (styles[style] == nil)) then
             local string = "/laugh "
             for k,v in pairs(styles) do
@@ -154,6 +160,9 @@ ix.command.Add("react", {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
 	OnRun = function(self, client, style)
+        if (client:IsFemale()) then
+            return "Для девушек эта функция недоступна"
+        end
 		if ((style == nil) or (styles[style] == nil)) then
             local string = "/react "
             for k,v in pairs(styles) do

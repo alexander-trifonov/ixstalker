@@ -1,8 +1,8 @@
 
-"ixquarantine"
+"ixstalker"
 {
 	"base" 			"helix"
-	"title" 		"Quarantine"
+	"title" 		"Stalker RP"
 	"author" 		"Mobious"
 	"menusystem"	"1"
 }

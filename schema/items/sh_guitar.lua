@@ -120,8 +120,10 @@ if (SERVER) then
         end
 
         local intro = Sound(styles[style].intro[math.random(1, #styles[style].intro)])
-        local introID = ix.playsound.Play(client, intro)
-
+        local introID = nil
+        if (!client:IsFemale()) then
+            introID = ix.playsound.Play(client, intro)
+        end
         local sound = Sound(music[genre][math.random(1, #music[genre])])
         timer.Simple(NewSoundDuration(intro), function()
             -- if new sound is playing, don't play the music

@@ -3,7 +3,6 @@ PLUGIN.name = "Invites"
 PLUGIN.author = "Mobious"
 PLUGIN.description = "Whitelists server, allowing people to invite other"
 
-
 function PLUGIN:LoadData()
 	PLUGIN.invites = self:GetData() or {}
 end
@@ -23,16 +22,6 @@ if (SERVER) then
     end)
 end
 
-ix.command.Add("music", {
-description = "Play an ambient music",
-arguments = {},
-superAdminOnly = true,
-OnRun = function(self, client)
-    net.Start("ixPlayAmbientMusic")
-    net.Send(client)
-end
-})
-
 ix.command.Add("invite", {
 	description = "Дает право игроку по STEAM_0: STEAM_ID присоединяться к серверу",
 	superAdminOnly = false,
@@ -45,6 +34,7 @@ ix.command.Add("invite", {
             return false
         else
             PLUGIN.invites[STEAM_0] = client:SteamID() -- parent
+            PLUGIN:SaveData()
         end
 	end
 })
@@ -61,6 +51,7 @@ ix.command.Add("inviteRemove", {
             return false
         else
             PLUGIN.invites[STEAM_0] = nil -- parent
+            PLUGIN:SaveData()
         end
 	end
 })

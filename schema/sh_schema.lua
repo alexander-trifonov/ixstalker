@@ -2,9 +2,9 @@
 -- The shared init file. You'll want to fill out the info for your schema and include any other files that you need.
 
 -- Schema info
-Schema.name = "Stalker"
+Schema.name = "S.T.A.L.K.E.R"
 Schema.author = "Mobious & nebulous"
-Schema.description = "A base schema for penis development."
+Schema.description = "В Зоне нет невиновных, и для каждого она найдет свое наказание"
 
 -- Additional files that aren't auto-included should be included here. Note that ix.util.Include will take care of properly
 -- using AddCSLuaFile, given that your files have the proper naming scheme.

@@ -9,3 +9,8 @@ function Schema:GetPlayerDeathSound(client)
 		return "NPC_MetroPolice.Die"
 	end
 end
+
+
+function Schema:OnCharacterCreated(client, character)
+	character:SetData("modelOriginal", character:GetModel()) -- prime, original player model he was created with. Usefull for outfit system
+end
