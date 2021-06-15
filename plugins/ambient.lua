@@ -7,13 +7,24 @@ PLUGIN.description = "Plays the penis music in background"
 
 ambient = ambient or {}
 ambient.normal = {
-    "stalker/talk/intros/intro_music_1.ogg.mp3"
+    "ambient/marsh_2.ogg.mp3",
+    "ambient/marsh_1.ogg.mp3",
+    "ambient/da13.ogg.mp3",
+    "ambient/da12.ogg.mp3",
+    "ambient/da10.ogg.mp3",
+    "ambient/da03.ogg.mp3",
+    "ambient/da02.ogg.mp3",
+    "ambient/amb17.ogg.mp3",
+    "ambient/amb16.ogg.mp3",
+    "ambient/amb10.ogg.mp3",
+    "ambient/amb07.ogg.mp3"
     --"music/hl1_song14.mp3"
 }
 
-ix.lang.AddTable("english", {
-	optEnableAmbientMusic = "Enable ambient music",
-    optdEnableAmbientMusic = "Music will begin to play in ~5 seconds until"
+ix.lang.AddTable("russian", {
+	optEnableAmbientMusic = "Включить фоновую музыку",
+    optdEnableAmbientMusic = "Мызука начнет скоро играть",
+    optAmbientVolume = "Громкость фоновой музыки"
 })
 
 
@@ -27,6 +38,11 @@ if (CLIENT) then
                 hook.Run("StopAmbientMusic")
             end
         end
+	})
+
+    ix.option.Add("ambientVolume", ix.type.number, 0.5, {
+		category = "music",  min = 0.1, max = 1, decimals = 1
+        
 	})
 
     local playerMeta = FindMetaTable("Player")
@@ -55,6 +71,7 @@ if (CLIENT) then
         end
 
         self.ambient:Play()
+        self.ambient:ChangeVolume(ix.option.Get("ambientVolume", 0.5))
         -- Play next
         timer.Simple(NewSoundDuration(sound) + delay, function()
             if (!forced) then
