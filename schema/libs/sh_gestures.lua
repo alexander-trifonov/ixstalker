@@ -51,7 +51,7 @@ do
             ix.type.text
         },
         OnRun = function(self, client, sequence)
-            ix.gestures.Play(client, sequence)
+            ix.gestures.Play(client, sequence, true)
         end
     })
 end
