@@ -45,7 +45,8 @@ function PLUGIN:AddSpawner(client, position, title, category, items)
 		["position"] = position,
 		["rarity"] = ix.config.Get("spawnerRareItemChance", 0),
 		["category"] = category,
-		["items"] = itemslist
+		["items"] = itemslist,
+		["itemTaken"] = true
 	})
 
 end
@@ -76,22 +77,38 @@ function PLUGIN:ForceSpawn(client, spawner)
 	-- end
 end
 
-function PLUGIN:Think() -- :\ replace with global timer wich ticks every ~30 seconds
-	if (table.IsEmpty(PLUGIN.spawner.positions) or !(ix.config.Get("spawnerActive", false))) then return end
+function PLUGIN:InitializedPlugins()
+	self.Delay = CurTime() + ix.config.Get("spawnerDelayCheck", 15)
+end
 
+function PLUGIN:Think() -- :\ replace with global timer wich ticks every ~30 seconds
+	if CurTime() < (self.Delay) then return end
+	if (table.IsEmpty(PLUGIN.spawner.positions) or !(ix.config.Get("spawnerActive", false))) then return end
+	
 	for k, v in pairs(PLUGIN.spawner.positions) do
-		--print(v.lastSpawned, os.time())
-		if (v.lastSpawned + (v.delay) < os.time()) then
-			v.lastSpawned = os.time()
-			ix.item.Spawn(v.items[math.random(1, #v.items)], v.position)
-			-- local rareChance = math.random(100)
-			-- if (rareChance <= ix.config.Get("spawnerRareItemChance", 0)) then
-			-- 	ix.item.Spawn(table.Random(PLUGIN.items.rare), v.position)
-			-- else
-			-- 	ix.item.Spawn(table.Random(PLUGIN.items.common), v.position)
-			-- end
+
+		if (v.itemTaken) then
+			if (v.lastSpawned + (v.delay) < os.time()) then
+				v.lastSpawned = os.time()
+				local ent = ix.item.Spawn(v.items[math.random(1, #v.items)], v.position)
+				local id =  ent.item.id
+				
+				-- 	ix.item.instances[id].hooks = {} -- IF THE FUCKING KEY IS NOT EXIST, IT WILL SEARCH IN IT'S PARENT METATABLE AKA ix.item.list
+				-- 	-- SO WE MAKE SURE THAT THE KEY EXIST
+				ix.item.instances[id].oldhooks = table.Copy(ix.item.instances[id].hooks) 
+				ix.item.instances[id].hooks = {}
+				ix.item.instances[id].hooks["take"] = function(item_picked, data)
+					v.itemTaken = true
+					v.lastSpawned = os.time()
+					ix.item.instances[id].hooks = table.Copy(ix.item.instances[id].oldhooks) 
+					ix.item.instances[id].oldhooks = nil
+				end
+
+				v.itemTaken = false
+			end
 		end
 	end
+	self.Delay = CurTime() + ix.config.Get("spawnerDelayCheck", 15)
 end
 
 net.Receive("ixItemSpawnerDelete", function(length, client)
