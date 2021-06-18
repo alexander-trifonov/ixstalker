@@ -25,13 +25,15 @@ local gestures = {
 
 -- @realm server
 function PLUGIN:PlayerMessageSend(client, info)
-    if (!client:IsWepRaised()) then
-        local gender = "male"
-        local style = "normal"
-        if (client:IsFemale()) then
-            gender = "female"
+    if (client) then
+        if (!client:IsWepRaised()) then
+            local gender = "male"
+            local style = "normal"
+            if (client:IsFemale()) then
+                gender = "female"
+            end
+            local animation = gestures[gender][style][math.random(1, #gestures[gender][style])]
+            ix.gestures.Play(client, animation, true)
         end
-        local animation = gestures[gender][style][math.random(1, #gestures[gender][style])]
-        ix.gestures.Play(client, animation, true)
     end
 end
