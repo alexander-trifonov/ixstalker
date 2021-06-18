@@ -46,9 +46,9 @@ end
 
 function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
-
 	if (CLIENT) then
 		local data = self:GetOwner():GetCharacter():GetData("ixPlacementData")
+		self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
 		self.Data = data;
 		--util.PrecacheModel(self.Data.Model);
 		-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
@@ -60,6 +60,12 @@ function SWEP:Initialize()
 		self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
 		self.MinOffset = self.Ent:GetModelBounds();
 		self.Angles = Angle(0,0,0)
+		if (self.Data.IsAnimation) then
+			self.AnimationIndex = 1
+			self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
+			self.AnimationPressDelay = CurTime()
+		end
+		self.Range = 100
 	end
 end
 
@@ -96,12 +102,17 @@ if (SERVER) then
 			client:StripWeapon("ix_placement")
 		end
 		client:GetCharacter():GetInventory():Remove(data.ItemID)
+		client:GetCharacter():SetData("ixPlacementData")
 		ent:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1,3)..".wav")
 	end)
 end
 
 function SWEP:SpawnEntity()
 	if (CLIENT) then
+		if (self.Ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > self.Range*self.Range) then
+			self:GetOwner():Notify("Слишком далеко")
+			return false
+		end
 		self.Data.Pos = self.Ent:GetPos()
 		self.Data.Angles = self.Ent:GetAngles()
 		net.Start("ixPlacementSpawnEntity")
@@ -109,6 +120,47 @@ function SWEP:SpawnEntity()
 		net.SendToServer()
 		self.Ent:Remove()
 	end
+end
+
+if (SERVER) then
+	util.AddNetworkString("ixSetPlayerAnimation")
+	net.Receive("ixSetPlayerAnimation", function(length, client)
+		local data = net.ReadTable();
+		client:SetPos(data.Pos)
+		client:SetAngles(data.Angles)
+		client.ixUntimedSequence = true -- allows to press +jump and leave sequence
+		client:SetNetVar("actEnterAngle", client:GetAngles()) -- allows to press +jump and leave sequence
+		client:ForceSequence(data.sequence, function()
+			client.ixUntimedSequence = nil
+			client:SetNetVar("actEnterAngle")
+
+			net.Start("ixActLeave")
+			net.Send(client)
+			client:SetPos(data.OldPos)
+		end, 0)
+		net.Start("ixActEnter")
+			net.WriteBool(true)
+		net.Send(client)
+		client:GetCharacter():SetData("ixPlacementData")
+		if (client:HasWeapon("ix_placement")) then
+			client:StripWeapon("ix_placement")
+		end
+	end)
+end
+
+function SWEP:SetPlayerAnimation()
+	if (self.Ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > self.Range*self.Range) then
+		self:GetOwner():Notify("Слишком далеко")
+		return false
+	end
+	self.Data.OldPos = self:GetOwner():GetPos()
+	self.Data.Pos = self.Ent:GetPos()
+	self.Data.Angles = self.Ent:GetAngles()
+	self.Data.sequence = self.Data.animations[self.AnimationIndex]
+	net.Start("ixSetPlayerAnimation")
+	net.WriteTable(self.Data)
+	net.SendToServer()
+	self.Ent:Remove()
 end
 
 function SWEP:Think()
@@ -119,8 +171,25 @@ function SWEP:Think()
 
 	if (CLIENT) then
 		if (IsValid(self.Ent)) then
-			if (input.IsKeyDown(KEY_E)) then
-				self:SpawnEntity()
+			if (self.Data.IsAnimation) then
+				if (CurTime() >= self.AnimationPressDelay) then
+					if (input.IsKeyDown(KEY_R)) then
+						self.AnimationIndex = self.AnimationIndex + 1
+						if (self.AnimationIndex > #self.Data.animations) then
+							self.AnimationIndex = 1
+						end
+						self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
+						self.AnimationPressDelay = CurTime() + 0.2
+					end
+					if (input.IsKeyDown(KEY_E)) then
+						self:SetPlayerAnimation()
+						self.AnimationPressDelay = CurTime() + 0.2
+					end
+				end
+			else
+				if (input.IsKeyDown(KEY_E)) then
+					self:SpawnEntity()
+				end
 			end
 			self.Ent:SetPos(self:GetOwner():GetEyeTrace().HitPos - Vector(0, 0, self.Ent:GetCollisionBounds().z));
 			self.Ent:SetAngles(self.Angles)
