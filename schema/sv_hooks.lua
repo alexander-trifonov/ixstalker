@@ -13,4 +13,11 @@ end
 
 function Schema:OnCharacterCreated(client, character)
 	character:SetData("modelOriginal", character:GetModel()) -- prime, original player model he was created with. Usefull for outfit system
+	local index = character:GetFaction()
+	local faction = ix.faction.indices[index]
+	if (faction.items) then
+		for k, v in pairs(faction.items) do
+			character:GetInventory():Add(v)
+		end
+	end
 end
