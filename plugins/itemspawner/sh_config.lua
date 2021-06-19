@@ -25,5 +25,5 @@ ix.config.Add("spawnerRareItemChance", 10, "Percentage chance of spawning a rare
 
 ix.config.Add("spawnerDelayCheck", 15, "Delay in seconds for timer to check spanwers", nil, {
 	category = "Item Spawner",
-	data = { min = 1, 600 }
+	data = { min = 1, max = 600 }
 })

@@ -83,6 +83,7 @@ end
 
 function PLUGIN:Think() -- :\ replace with global timer wich ticks every ~30 seconds
 	if CurTime() < (self.Delay) then return end
+	self.Delay = CurTime() + ix.config.Get("spawnerDelayCheck", 15)
 	if (table.IsEmpty(PLUGIN.spawner.positions) or !(ix.config.Get("spawnerActive", false))) then return end
 	
 	for k, v in pairs(PLUGIN.spawner.positions) do
@@ -108,7 +109,6 @@ function PLUGIN:Think() -- :\ replace with global timer wich ticks every ~30 sec
 			end
 		end
 	end
-	self.Delay = CurTime() + ix.config.Get("spawnerDelayCheck", 15)
 end
 
 net.Receive("ixItemSpawnerDelete", function(length, client)

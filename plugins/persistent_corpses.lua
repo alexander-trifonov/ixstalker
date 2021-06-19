@@ -61,7 +61,7 @@ if (SERVER) then
 
 	-- disable the regular hl2 ragdolls
 	function PLUGIN:ShouldSpawnClientRagdoll(client)
-		return false
+		return !ix.config.Get("persistentCorpses")
 	end
 
 	function PLUGIN:PlayerSpawn(client)
