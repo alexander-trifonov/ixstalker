@@ -131,6 +131,9 @@ if (SERVER) then
     function PLUGIN:OnCharacterCreated(client, character)
         client:SetHunger(100)
         client:SetThirst(100)
+        character:SetData("hunger", 100)
+        character:SetData("thirst", 100)
+        
     end
 
     function PLUGIN:PlayerLoadedCharacter(client, character)
@@ -162,8 +165,10 @@ if (SERVER) then
         if (CurTime() > self.Delay) then
             local players = player.GetAll()
             for k, v in pairs(players) do
-                v:SetHunger(v:GetHunger() - ix.config.Get("ixNeedsHungerConsumes", 0.1))
-                v:SetThirst(v:GetThirst() - ix.config.Get("ixNeedsThirstConsumes", 0.2))
+                if (IsValid(v) and v:GetCharacter()) then
+                    v:SetHunger(v:GetHunger() - ix.config.Get("ixNeedsHungerConsumes", 0.1))
+                    v:SetThirst(v:GetThirst() - ix.config.Get("ixNeedsThirstConsumes", 0.2))
+                end
             end
             self.Delay = CurTime() + ix.config.Get("ixNeedsThinkDelay", 1)
         end
@@ -187,16 +192,18 @@ ix.config.Add("ixNeedsThirstConsumes", 0.2, "How much hunger consumed per ThinkD
 
 -- To do
 -- Client bar
-
 if (CLIENT) then
-    do
-        ix.bar.Add(function()
-            return LocalPlayer():GetLocalVar("hunger")/100                
-        end, Color(200, 200, 40), nil, "hunger")
+    ix.bar.Add(function()
+        return LocalPlayer():GetLocalVar("hunger")/100                
+    end, Color(200, 200, 40), nil, "hunger")
 
-        ix.bar.Add(function()
-            return LocalPlayer():GetLocalVar("thirst")/100                
-        end, Color(127, 195, 255), nil, "thirst")
+    ix.bar.Add(function()
+        return LocalPlayer():GetLocalVar("thirst")/100                
+    end, Color(127, 195, 255), nil, "thirst")
 
+    function PLUGIN:ShouldBarDraw(bar)
+        if ((bar == "hunger") or (bar == "thirst")) then
+            return IsValid(LocalPlayer()) and IsValid(LocalPlayer():GetCharacter())
+        end
     end
 end
