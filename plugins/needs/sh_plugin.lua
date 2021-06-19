@@ -88,7 +88,7 @@ if (SERVER) then
 
     function playerMeta:SetThirst(number)
         -- local char = self:GetCharacter()
-        -- char:SetData('thirst', number)
+        --self:SetData('thirst', number)
         self:SetLocalVar("thirst", math.Clamp(number, 0, 100))
         hook.Run("ixOnSetThirst", self, number)
     end
@@ -187,3 +187,16 @@ ix.config.Add("ixNeedsThirstConsumes", 0.2, "How much hunger consumed per ThinkD
 
 -- To do
 -- Client bar
+
+if (CLIENT) then
+    do
+        ix.bar.Add(function()
+            return LocalPlayer():GetLocalVar("hunger")/100                
+        end, Color(200, 200, 40), nil, "hunger")
+
+        ix.bar.Add(function()
+            return LocalPlayer():GetLocalVar("thirst")/100                
+        end, Color(127, 195, 255), nil, "thirst")
+
+    end
+end
