@@ -21,3 +21,11 @@ function Schema:OnCharacterCreated(client, character)
 		end
 	end
 end
+
+function Schema:OnItemTransferred(item, curInv, inventory)
+	if (item.player) then
+		if (inventory == item.player:GetCharacter():GetInventory()) then
+			ix.chat.Send(item.player, "me", "подобрал "..item.name)
+		end
+	end					
+end
