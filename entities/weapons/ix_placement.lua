@@ -87,6 +87,14 @@ if (SERVER) then
 	util.AddNetworkString("ixPlacementSpawnEntity")
 	net.Receive("ixPlacementSpawnEntity", function(length, client)
 		local data = net.ReadTable();
+		if (client:GetPos():DistToSqr(data.Pos) > data.Range*data.Range) then
+			client:Notify("Слишком далеко")
+			if (client:HasWeapon("ix_placement")) then
+				client:StripWeapon("ix_placement")
+			end
+			client:GetCharacter():SetData("ixPlacementData")
+			return false
+		end
 		if (data.ItemUniqueID) then
 			if (!client:CanPlaceEntity(data.ItemUniqueID)) then return end
 		end
@@ -109,12 +117,9 @@ end
 
 function SWEP:SpawnEntity()
 	if (CLIENT) then
-		if (self.Ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > self.Range*self.Range) then
-			self:GetOwner():Notify("Слишком далеко")
-			return false
-		end
 		self.Data.Pos = self.Ent:GetPos()
 		self.Data.Angles = self.Ent:GetAngles()
+		self.Data.Range = self.Range
 		net.Start("ixPlacementSpawnEntity")
 		net.WriteTable(self.Data)
 		net.SendToServer()
@@ -126,6 +131,15 @@ if (SERVER) then
 	util.AddNetworkString("ixSetPlayerAnimation")
 	net.Receive("ixSetPlayerAnimation", function(length, client)
 		local data = net.ReadTable();
+		if (client:GetPos():DistToSqr(data.Pos) > data.Range*data.Range) then
+			client:Notify("Слишком далеко")
+			if (client:HasWeapon("ix_placement")) then
+				client:StripWeapon("ix_placement")
+			end
+			client:GetCharacter():SetData("ixPlacementData")
+			return false
+		end
+		
 		client:SetPos(data.Pos)
 		client:SetAngles(data.Angles)
 		client.ixUntimedSequence = true -- allows to press +jump and leave sequence
@@ -149,14 +163,11 @@ if (SERVER) then
 end
 
 function SWEP:SetPlayerAnimation()
-	if (self.Ent:GetPos():DistToSqr(self:GetOwner():GetPos()) > self.Range*self.Range) then
-		self:GetOwner():Notify("Слишком далеко")
-		return false
-	end
 	self.Data.OldPos = self:GetOwner():GetPos()
 	self.Data.Pos = self.Ent:GetPos()
 	self.Data.Angles = self.Ent:GetAngles()
 	self.Data.sequence = self.Data.animations[self.AnimationIndex]
+	self.Data.Range = self.Range
 	net.Start("ixSetPlayerAnimation")
 	net.WriteTable(self.Data)
 	net.SendToServer()
