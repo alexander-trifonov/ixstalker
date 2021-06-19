@@ -50,22 +50,3 @@ ix.command.Add("sit", {
         -- net.Send(client)
 	end
 })
-
-if (SERVER) then
-    util.AddNetworkString("ixCommandSit")
-end
-
-if (CLIENT) then
-    local function RenderOptions()
-        local data = data or {};
-        data.Entity = data.Entity or "ix_placeable"
-        client:GetCharacter():SetData("ixPlacementData", data);
-        client:Give("ix_placement");
-        client:SelectWeapon("ix_placement")
-    end
-
-    net.Receive("ixCommandSit", function()
-
-    end)
-    
-end
