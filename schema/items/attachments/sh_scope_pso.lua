@@ -6,7 +6,6 @@ ITEM.width = 1
 ITEM.height = 1
 ITEM.uniqueID = "mifl_fas2_optic_pso1"
 
-
 ITEM.exRender = true
 ITEM.iconCam = {
 	pos = Vector(0.87822657823563, 12.366500854492, 0.97315901517868),

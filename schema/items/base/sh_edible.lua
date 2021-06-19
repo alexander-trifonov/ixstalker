@@ -5,6 +5,7 @@ ITEM.width = 1
 ITEM.height = 1
 ITEM.description = "Something edible"
 ITEM.category = "Consumables"
+ITEM.bDropOnDeath = true
 --ITEM.useSound = "items/ammo_pickup.wav"
 
 -- function ITEM:GetDescription()

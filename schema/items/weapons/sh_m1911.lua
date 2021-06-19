@@ -4,6 +4,7 @@ ITEM.class = "arccw_mifl_fas2_m1911"
 ITEM.weaponCategory = "sidearm"
 ITEM.durability = 100
 ITEM.uniqueID = "m1911"
+ITEM.bDropOnDeath = true
 
 ITEM.model = "models/weapons/arccw/mifl/fas2/c_m1911.mdl"
 ITEM.width = 1
