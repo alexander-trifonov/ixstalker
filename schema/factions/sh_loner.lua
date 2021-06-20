@@ -3,6 +3,7 @@ FACTION.description = "Люди, скитающиеся по Зоне в пои�
 FACTION.isDefault = true
 FACTION.color = Color(217, 160, 71)
 FACTION.pay = 100
+FACTION.payTime = 600
 FACTION.items = {
     "flashlight"
 }

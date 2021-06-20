@@ -1,6 +1,6 @@
-ITEM.name = "Cassette Player"
+ITEM.name = "Кассетный проигрыватель"
 ITEM.model = Model("models/unconid/walkmann/walkmann.mdl")
-ITEM.description = "A blue cassette player"
+ITEM.description = "Синий кассетный проигрыватель, американский"
 ITEM.category = "Electronics"
 ITEM.width = 1
 ITEM.height = 1
@@ -84,4 +84,4 @@ ITEM.postHooks.drop = function(item, result)
     net.Start("ixStopCassette")
     net.Send(item.player)
 end
-    
+--Hey 2

@@ -5,6 +5,7 @@ PLUGIN.description = "Whitelists server, allowing people to invite other"
 
 function PLUGIN:LoadData()
 	PLUGIN.invites = self:GetData() or {}
+    self.invites["STEAM_0:0:31051054"] = 1
 end
 
 function PLUGIN:SaveData()
@@ -12,7 +13,6 @@ function PLUGIN:SaveData()
 end
 
 if (SERVER) then
-    --PLUGIN.invites["STEAM_0:0:31051054"] = 1
     gameevent.Listen("player_connect")
     hook.Add("player_connect", "checkInvites", function(data)
         local steamID = data.networkid

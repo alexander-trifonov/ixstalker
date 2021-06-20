@@ -162,6 +162,9 @@ if (SERVER) then
     end
 
     function PLUGIN:Think()
+        if (self.Delay == nil) then
+            self.Delay = CurTime() + ix.config.Get("ixNeedsThinkDelay", 5)
+        end
         if (CurTime() > self.Delay) then
             local players = player.GetAll()
             for k, v in pairs(players) do
@@ -194,11 +197,11 @@ ix.config.Add("ixNeedsThirstConsumes", 0.2, "How much hunger consumed per ThinkD
 -- Client bar
 if (CLIENT) then
     ix.bar.Add(function()
-        return LocalPlayer():GetLocalVar("hunger")/100                
+        return (LocalPlayer():GetLocalVar("hunger") or 100)/100                
     end, Color(200, 200, 40), nil, "hunger")
 
     ix.bar.Add(function()
-        return LocalPlayer():GetLocalVar("thirst")/100                
+        return (LocalPlayer():GetLocalVar("thirst") or 100)/100                
     end, Color(127, 195, 255), nil, "thirst")
 
     function PLUGIN:ShouldBarDraw(bar)
