@@ -12,7 +12,7 @@ if (SERVER) then
         net.WriteString(sequence)
         net.WriteBool(autokill)
         net.WriteEntity(client)
-        net.SendOmit(client)
+        net.Broadcast()
         client:AddVCDSequenceToGestureSlot(GESTURE_SLOT_VCD, client:LookupSequence(sequence), 0, autokill);
     end
 
@@ -31,7 +31,7 @@ if (CLIENT) then
         net.WriteString(sequence)
         net.WriteBool(autokill)
         net.SendToServer()
-        LocalPlayer():AddVCDSequenceToGestureSlot(GESTURE_SLOT_VCD, client:LookupSequence(sequence), 0, autokill);
+        --LocalPlayer():AddVCDSequenceToGestureSlot(GESTURE_SLOT_VCD, client:LookupSequence(sequence), 0, autokill);
     end
 
     net.Receive("ixGesturesPlay", function()
