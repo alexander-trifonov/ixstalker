@@ -2,8 +2,8 @@ FACTION.name = "Сталкеры"
 FACTION.description = "Люди, скитающиеся по Зоне в поисках заработка. Большинство работают в одиночку и погибают, остальные расскажут как важно найти друга"
 FACTION.isDefault = true
 FACTION.color = Color(217, 160, 71)
-FACTION.pay = 100
---FACTION.payTime = 3600
+FACTION.pay = 20
+FACTION.payTime = 600
 FACTION.items = {
     "flashlight"
 }
