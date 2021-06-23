@@ -24,3 +24,10 @@ ix.util.Include("sv_hooks.lua")
 -- You'll need to manually include files in the meta/ folder, however.
 ix.util.Include("meta/sh_character.lua")
 ix.util.Include("meta/sh_player.lua")
+
+
+ix.currency = ix.currency or {}
+ix.currency.symbol = "₽"
+ix.currency.singular = "rouble"
+ix.currency.plural = "roubles"
+ix.currency.model = "models/props_lab/box01a.mdl"
