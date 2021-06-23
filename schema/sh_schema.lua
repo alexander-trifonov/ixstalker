@@ -25,7 +25,6 @@ ix.util.Include("sv_hooks.lua")
 ix.util.Include("meta/sh_character.lua")
 ix.util.Include("meta/sh_player.lua")
 
-
 ix.currency = ix.currency or {}
 ix.currency.symbol = "₽"
 ix.currency.singular = "rouble"
