@@ -18,20 +18,20 @@ local allowedSlots = {
 }
 
 -- temporary
--- ix.command.Add("cleanup", {
--- 	description = "clean all entities",
--- 	superAdminOnly = true,
--- 	OnRun = function(self, client)
---         PrintTable(ix.item.instances)
---         ix.item.instances = {}
---         local entities = ents.GetAll()
---         for k, v in pairs(entities) do
---             if (v:GetClass() == "ix_item") then
---                 v:Remove()
---             end
---         end
--- 	end
--- })
+ix.command.Add("cleanup", {
+	description = "clean all entities",
+	superAdminOnly = true,
+	OnRun = function(self, client)
+        PrintTable(ix.item.instances)
+        ix.item.instances = {}
+        local entities = ents.GetAll()
+        for k, v in pairs(entities) do
+            if ((v:GetClass() == "ix_item") or ((v:GetClass() == "ix_vendor"))) then
+                v:Remove()
+            end
+        end
+	end
+})
 
 
 -- При взятии оружия в руки, если в нем есть какая-то дата, она не сетается
