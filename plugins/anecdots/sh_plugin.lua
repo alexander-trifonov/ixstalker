@@ -87,9 +87,8 @@ styles = {
     }
 }
 
-ix.command.Add("joke", {
+ix.command.Add("voiceJoke", {
 	description = "Tell a joke to nearby stalkers",
-	superAdminOnly = true,
 	arguments = {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
@@ -98,7 +97,7 @@ ix.command.Add("joke", {
             return "Для девушек эта функция недоступна"
         end
         if ((style == nil) or (styles[style] == nil)) then
-            local string = "Use /joke "
+            local string = "Use /voiceJoke "
             for k,v in pairs(styles) do
                 string = string..k.." | "
             end
@@ -123,7 +122,7 @@ ix.command.Add("joke", {
                 for k,v in pairs(entities) do
                     if (v:IsPlayer()) then
                         v:ChatNotify("Вы услышали анекдот, и вам стало приятно на душе")
-                        v:Notify("Вы можете отреагировать используя /laugh, /react")
+                        v:Notify("Вы можете отреагировать используя /voiceLaugh, /voiceReact")
                     end
                 end
             end)
@@ -131,9 +130,8 @@ ix.command.Add("joke", {
 	end
 })
 
-ix.command.Add("laugh", {
+ix.command.Add("voiceLaugh", {
 	description = "Laugh with or at someone",
-	superAdminOnly = true,
 	arguments = {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
@@ -142,7 +140,7 @@ ix.command.Add("laugh", {
             return "Для девушек эта функция недоступна"
         end
 		if ((style == nil) or (styles[style] == nil)) then
-            local string = "/laugh "
+            local string = "/voiceLaugh "
             for k,v in pairs(styles) do
                 string = string..k.." | "
             end
@@ -153,9 +151,8 @@ ix.command.Add("laugh", {
 	end
 })
 
-ix.command.Add("react", {
+ix.command.Add("voiceReact", {
 	description = "React at bad joke",
-	superAdminOnly = true,
 	arguments = {
 		bit.bor(ix.type.string, ix.type.optional)
 	},
@@ -164,7 +161,7 @@ ix.command.Add("react", {
             return "Для девушек эта функция недоступна"
         end
 		if ((style == nil) or (styles[style] == nil)) then
-            local string = "/react "
+            local string = "/voiceReact "
             for k,v in pairs(styles) do
                 string = string..k.." | "
             end

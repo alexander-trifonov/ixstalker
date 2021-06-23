@@ -104,7 +104,7 @@ if (SERVER) then
 
 	function PLUGIN:LoadData()
 		for _, v in ipairs(self:GetData() or {}) do
-			local entity = ents.Create("ix_vendor")
+			local entity = ents.Create("ix_actor")
 			entity:SetPos(v.pos)
 			entity:SetAngles(v.angles)
 			entity:Spawn()
