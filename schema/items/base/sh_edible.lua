@@ -15,6 +15,19 @@ ITEM.tools = {
     -- "cup"
 }
 
+
+if (CLIENT) then
+    function ITEM:PopulateTooltip(tooltip)
+        if (self:GetData("uses", self.uses)) then
+            local uses = tooltip:AddRow("sign")
+            local text = "Осталось: "..self:GetData("uses", self.uses)--.."\n"..self:GetDescription()
+            uses:SetColor(Color(255, 150, 20))
+            uses:SetText(text or "")
+	        uses:SizeToContents()
+        end
+    end
+end
+
 function ITEM:TakeInHands()
     local client = self.player
 
@@ -48,7 +61,7 @@ ITEM.functions.TakeInHands = {
         ent:FollowBone(client, handID)
         local pos, angle = client:GetBonePosition(handID)
         -- Get proper position
-        pos, angle = LocalToWorld(Vector(3.5, -3, -3.3), Angle(0, 0, 0), pos, angle)
+        pos, angle = LocalToWorld(item.pos or Vector(3.5, -3, -3.3), Angle(0, 0, 0), pos, angle)
         -- Get proper angle
         angle = Angle(0,0,0)
         angle:RotateAroundAxis(angle:Right(), 180)
@@ -88,6 +101,15 @@ ITEM.functions.Eat = {
         client:SetThirst(client:GetThirst() + item.thirstGain)
         client:SetHunger(client:GetHunger() + item.hungerGain)
         ix.gestures.Play(client, "g_fist_r", true)
+
+        if (item.uses) then
+            print(item:GetData("uses"))
+            if (item:GetData("uses", item.uses) > 1) then
+                item:SetData("uses", item:GetData("uses", item.uses) - 1)
+                print(item:GetData("uses"))
+                return false
+            end
+        end
         return true
     end
 }
