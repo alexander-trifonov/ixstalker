@@ -10,7 +10,8 @@ ix.placement = ix.placement or {}
 function ix.placement.PlaceEntity(client, data)
     local data = data or {};
     data.Entity = data.Entity or "ix_placeable"
-    client:GetCharacter():SetData("ixPlacementData", data);
+    --client:GetCharacter():SetData("ixPlacementData", data);
+    client:SetLocalVar("ixPlacementData", data)
     client:Give("ix_placement");
     client:SelectWeapon("ix_placement")
 end
