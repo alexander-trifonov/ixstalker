@@ -47,7 +47,7 @@ end
 function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
 	if (CLIENT) then
-		local data = self:GetOwner():GetCharacter():GetData("ixPlacementData")
+		local data = self:GetOwner():GetLocalVar("ixPlacementData")
 		self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
 		self.Data = data;
 		--util.PrecacheModel(self.Data.Model);
@@ -92,7 +92,7 @@ if (SERVER) then
 			if (client:HasWeapon("ix_placement")) then
 				client:StripWeapon("ix_placement")
 			end
-			client:GetCharacter():SetData("ixPlacementData")
+			client:SetLocalVar("ixPlacementData")
 			return false
 		end
 		if (data.ItemUniqueID) then
@@ -110,7 +110,7 @@ if (SERVER) then
 			client:StripWeapon("ix_placement")
 		end
 		client:GetCharacter():GetInventory():Remove(data.ItemID)
-		client:GetCharacter():SetData("ixPlacementData")
+		client:SetLocalVar("ixPlacementData")
 		ent:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1,3)..".wav")
 	end)
 end
@@ -136,7 +136,7 @@ if (SERVER) then
 			if (client:HasWeapon("ix_placement")) then
 				client:StripWeapon("ix_placement")
 			end
-			client:GetCharacter():SetData("ixPlacementData")
+			client:SetLocalVar("ixPlacementData")
 			return false
 		end
 		
@@ -155,7 +155,7 @@ if (SERVER) then
 		net.Start("ixActEnter")
 			net.WriteBool(true)
 		net.Send(client)
-		client:GetCharacter():SetData("ixPlacementData")
+		client:SetLocalVar("ixPlacementData")
 		if (client:HasWeapon("ix_placement")) then
 			client:StripWeapon("ix_placement")
 		end
