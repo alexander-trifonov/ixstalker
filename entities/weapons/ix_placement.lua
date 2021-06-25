@@ -209,6 +209,9 @@ function SWEP:Think()
 			end
 			self.Ent:SetPos(self:GetOwner():GetEyeTrace().HitPos - Vector(0, 0, self.Ent:GetCollisionBounds().z));
 			self.Ent:SetAngles(self.Angles)
+			if (self.AnimationIndex) then
+				self.Ent:SetPos(self.Ent:GetPos() + Vector(0, 0, -20))
+			end
 		end
 	end
 end

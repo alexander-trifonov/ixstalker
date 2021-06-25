@@ -1,7 +1,7 @@
-ITEM.name = "Guitar"
+ITEM.name = "Гитара"
 ITEM.model = Model("models/se_ex/dev_gitara.mdl")
-ITEM.description = "Penis guitar"
-ITEM.category = "Consumables"
+ITEM.description = "Старая добрая гитара, поддерживающая дух сталкеров у костра"
+ITEM.category = "Survival"
 ITEM.width = 2 -- Width and height refer to how many grid spaces this item takes up.
 ITEM.height = 1
 ITEM.uniqueID = "guitar"
@@ -142,6 +142,7 @@ if (SERVER) then
                         v:ChatNotify("Вы послушали гитару, и вам стало теплее на душе")
                     end
                 end
+                client:Notify("Не забудьте убрать гитару")
             end)
         end)
     end)

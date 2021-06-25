@@ -2,7 +2,7 @@
 ITEM.name = "Soda"
 ITEM.model = Model("models/props_junk/popcan01a.mdl")
 ITEM.description = "A blue can filled with some carbonated flavoured water. Delicious."
-ITEM.category = "Consumables"
+ITEM.category = "Test"
 ITEM.width = 1 -- Width and height refer to how many grid spaces this item takes up.
 ITEM.height = 1
 
