@@ -15,3 +15,6 @@ ITEM.items = {
     "ammo_pistol"
 }
 
+ITEM.functions.take.OnCanRun = function(item)
+    return false
+end
