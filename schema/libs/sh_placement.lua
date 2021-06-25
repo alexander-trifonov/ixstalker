@@ -6,7 +6,6 @@ ix.placement = ix.placement or {}
 -- prop: alive prop/entity
 -- despawn: process of despawning the prop
 
-
 function ix.placement.PlaceEntity(client, data)
     local data = data or {};
     data.Entity = data.Entity or "ix_placeable"
