@@ -2,7 +2,7 @@
 ITEM.name = "Campfire"
 ITEM.model = Model("models/props_junk/cardboard_box004a.mdl")
 ITEM.description = "Набор для разведения костра, у которого можно согреться, отдохнуть и поесть"
-ITEM.category = "Survival"
+ITEM.category = "TEST"
 ITEM.width = 1 -- Width and height refer to how many grid spaces this item takes up.
 ITEM.height = 1
 

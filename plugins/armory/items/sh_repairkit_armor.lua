@@ -20,6 +20,11 @@ if (CLIENT) then
             durability:SetText(text or "")
             durability:SizeToContents()
         end
+        local threshold = tooltip:AddRow("threshold")
+        local text = "Необходимый навык портного дела: 2"
+        threshold:SetColor(Color(150, 60, 60))
+        threshold:SetText(text or "")
+        threshold:SizeToContents()
     end
 end
 

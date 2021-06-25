@@ -7,6 +7,18 @@ ITEM.height = 1
 ITEM.threshold = 2 -- attribute threshold to use it
 ITEM.healingPoints = 3 -- heal points per attribute point
 
+if (CLIENT) then
+    function ITEM:PopulateTooltip(tooltip)
+        if (self.threshold) then
+            local threshold = tooltip:AddRow("threshold")
+            local text = "Необходимый навык медицины: "..self.threshold
+            threshold:SetColor(Color(150, 60, 60))
+            threshold:SetText(text or "")
+            threshold:SizeToContents()
+        end
+    end
+end
+
 ITEM.functions.Use = {
     name = "Использовать на себе",
 	OnRun = function(item, data)

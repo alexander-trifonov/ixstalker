@@ -35,6 +35,7 @@ ix.command.Add("invite", {
         else
             PLUGIN.invites[STEAM_0] = client:SteamID() -- parent
             PLUGIN:SaveData()
+            client:Notify("Вы добавили "..STEAM_0)
         end
 	end
 })

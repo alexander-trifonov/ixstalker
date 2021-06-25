@@ -12,7 +12,6 @@ ix.command.Add("sit", {
         data.IsAnimation = true
         if (!client:IsFemale()) then
             data.animations = {
-                "sit_ground",
                 "sit_chair",
                 "silo_sit",
                 "sitccouchtv1",
@@ -28,7 +27,6 @@ ix.command.Add("sit", {
             -- Women :|
             data.animations = {
                 "sit_chair",
-                "sit_ground",
                 "plazaidle4",
                 "d1_t02_plaza_sit01_idle",
                 --"d1_t03_sit_bed_entry",
