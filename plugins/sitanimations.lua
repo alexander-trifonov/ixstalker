@@ -12,6 +12,7 @@ ix.command.Add("sit", {
         data.IsAnimation = true
         if (!client:IsFemale()) then
             data.animations = {
+                --sit_ground
                 "sit_chair",
                 "silo_sit",
                 "sitccouchtv1",

@@ -5,7 +5,7 @@ ITEM.category = "Medicine"
 ITEM.width = 1 -- Width and height refer to how many grid spaces this item takes up.
 ITEM.height = 1
 ITEM.threshold = 2 -- attribute threshold to use it
-ITEM.healingPoints = 3 -- heal points per attribute point
+ITEM.healingPoints = 10 -- heal points per attribute point
 
 if (CLIENT) then
     function ITEM:PopulateTooltip(tooltip)
@@ -30,7 +30,7 @@ ITEM.functions.Use = {
             if (points > 0) then
                 client:Notify("Вы восстановили себе "..points.." очков здоровья")
             end
-            item:Remove()
+            --item:Remove()
             return true
         end)
         return false

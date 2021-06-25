@@ -9,8 +9,13 @@ if (SERVER) then
     RunConsoleCommand("arccw_attinv_loseondie", 0)
     RunConsoleCommand("arccw_enable_dropping", 0)
     RunConsoleCommand("arccw_attinv_free", 1)
+
+    RunConsoleCommand("sf_maplight_updaterate", 0)
+    RunConsoleCommand("sf_hide_forecast", 1)
 else
     RunConsoleCommand("arccw_autosave", 0)
+    RunConsoleCommand("arccw_hud_showhealth", 0)
+    RunConsoleCommand("arccw_hud_showammo", 0)
 end
 
 local allowedSlots = {
