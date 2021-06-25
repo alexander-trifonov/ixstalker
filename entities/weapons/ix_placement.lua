@@ -44,30 +44,10 @@ SWEP.HoldType = "fist"
 function SWEP:SetupDataTables()
 end
 
-function SWEP:Deploy()
+function SWEP:Initialize()
+	self:SetHoldType(self.HoldType)
 	timer.Simple(0.5, function()
-		self:SetHoldType(self.HoldType)
-		if (CLIENT) then
-			local data = self:GetOwner():GetLocalVar("ixPlacementData")
-			self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
-			self.Data = data;
-			--util.PrecacheModel(self.Data.Model);
-			-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
-			-- DO THIS:
-			self.Ent = ents.CreateClientProp()
-			self.Ent:SetModel(self.Data.Model)
-			self.Ent:SetMaterial("models/debug/debugwhite")
-			self.Ent:SetColor(Color(255,255,255, 128))
-			self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
-			self.MinOffset = self.Ent:GetModelBounds();
-			self.Angles = Angle(0,0,0)
-			if (self.Data.IsAnimation) then
-				self.AnimationIndex = 1
-				self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
-				self.AnimationPressDelay = CurTime()
-			end
-			self.Range = 100
-		end
+		
 	end)
 end
 
@@ -183,6 +163,29 @@ function SWEP:Think()
 	end
 
 	if (CLIENT) then
+		if (self.Data == nil) then
+			if (self:GetOwner():GetLocalVar("ixPlacementData") == nil) then return end
+			local data = self:GetOwner():GetLocalVar("ixPlacementData")
+			self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
+			self.Data = data;
+			--util.PrecacheModel(self.Data.Model);
+			-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
+			-- DO THIS:
+			self.Ent = ents.CreateClientProp()
+			self.Ent:SetModel(self.Data.Model)
+			self.Ent:SetMaterial("models/debug/debugwhite")
+			self.Ent:SetColor(Color(255,255,255, 128))
+			self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
+			self.MinOffset = self.Ent:GetModelBounds();
+			self.Angles = Angle(0,0,0)
+			if (self.Data.IsAnimation) then
+				self.AnimationIndex = 1
+				self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
+				self.AnimationPressDelay = CurTime()
+			end
+			self.Range = 100
+		end
+
 		if (IsValid(self.Ent)) then
 			if (self.Data.IsAnimation) then
 				if (CurTime() >= self.AnimationPressDelay) then
