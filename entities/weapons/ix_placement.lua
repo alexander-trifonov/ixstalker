@@ -45,28 +45,30 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	self:SetHoldType(self.HoldType)
-	if (CLIENT) then
-		local data = self:GetOwner():GetLocalVar("ixPlacementData")
-		self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
-		self.Data = data;
-		--util.PrecacheModel(self.Data.Model);
-		-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
-		-- DO THIS:
-		self.Ent = ents.CreateClientProp()
-		self.Ent:SetModel(self.Data.Model)
-		self.Ent:SetMaterial("models/debug/debugwhite")
-		self.Ent:SetColor(Color(255,255,255, 128))
-		self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
-		self.MinOffset = self.Ent:GetModelBounds();
-		self.Angles = Angle(0,0,0)
-		if (self.Data.IsAnimation) then
-			self.AnimationIndex = 1
-			self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
-			self.AnimationPressDelay = CurTime()
+	timer.Simple(0.5, function()
+		self:SetHoldType(self.HoldType)
+		if (CLIENT) then
+			local data = self:GetOwner():GetLocalVar("ixPlacementData")
+			self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
+			self.Data = data;
+			--util.PrecacheModel(self.Data.Model);
+			-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
+			-- DO THIS:
+			self.Ent = ents.CreateClientProp()
+			self.Ent:SetModel(self.Data.Model)
+			self.Ent:SetMaterial("models/debug/debugwhite")
+			self.Ent:SetColor(Color(255,255,255, 128))
+			self.Ent:SetRenderMode(RENDERMODE_TRANSCOLOR)
+			self.MinOffset = self.Ent:GetModelBounds();
+			self.Angles = Angle(0,0,0)
+			if (self.Data.IsAnimation) then
+				self.AnimationIndex = 1
+				self.Ent:ResetSequence(self.Data.animations[self.AnimationIndex])
+				self.AnimationPressDelay = CurTime()
+			end
+			self.Range = 100
 		end
-		self.Range = 100
-	end
+	end)
 end
 
 function SWEP:PrimaryAttack()
