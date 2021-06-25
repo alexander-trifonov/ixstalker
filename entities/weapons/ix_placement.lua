@@ -44,12 +44,12 @@ SWEP.HoldType = "fist"
 function SWEP:SetupDataTables()
 end
 
-function SWEP:Deploy(owner)
+function SWEP:Deploy()
 	timer.Simple(0.5, function()
 		self:SetHoldType(self.HoldType)
 		if (CLIENT) then
-			local data = owner:GetLocalVar("ixPlacementData")
-			owner:Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
+			local data = self:GetOwner():GetLocalVar("ixPlacementData")
+			self:GetOwner():Notify("ЛКМ, ПКМ - поворачивать, R - переключать, E - поставить")
 			self.Data = data;
 			--util.PrecacheModel(self.Data.Model);
 			-- DO NOT DO ents.CreateClientProp("your/model") - IT CAUSES UNEXPECTED BEHAVIOR
