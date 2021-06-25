@@ -1,4 +1,4 @@
-ITEM.name = "Патроны для автомата"
+ITEM.name = "Патроны 5.45х39"
 ITEM.model = "models/spec45as/stalker/ammo/ammo_545x39_fmj.mdl"
 ITEM.ammo = "ar2" -- type of the ammo
 ITEM.ammoAmount = 60 -- amount of the ammo
