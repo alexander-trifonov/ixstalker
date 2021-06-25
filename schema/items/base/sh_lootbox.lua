@@ -13,7 +13,7 @@ ITEM.openingSounds = {
 ITEM.searchTime = 4
 ITEM.items = {};
 
-ITEM.functions.take.OnCanRun = function()
+ITEM.functions.take.OnCanRun = function(item)
     return false
 end
 
