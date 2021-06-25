@@ -44,7 +44,7 @@ SWEP.HoldType = "fist"
 function SWEP:SetupDataTables()
 end
 
-function SWEP:Equip(owner)
+function SWEP:Deploy(owner)
 	timer.Simple(0.5, function()
 		self:SetHoldType(self.HoldType)
 		if (CLIENT) then
