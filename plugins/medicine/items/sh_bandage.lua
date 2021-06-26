@@ -23,14 +23,14 @@ ITEM.functions.Use = {
     name = "Использовать на себе",
 	OnRun = function(item, data)
         local client = item.player
-        local points = hook.Run("healCalculate", client, item.threshold) * item.healingPoints
+        local points = hook.Run("healCalculate", client, item.threshold, nil) * item.healingPoints
         client:EmitSound("consumables/inv_bandage.ogg.mp3")
         client:SetAction("Вы используете бинт...", 3, function()
             client:SetHealth(math.Clamp(client:Health() + points, 1, client:GetMaxHealth()))
             if (points > 0) then
                 client:Notify("Вы восстановили себе "..points.." очков здоровья")
             end
-            --item:Remove()
+            item:Remove()
             return true
         end)
         return false
@@ -57,7 +57,7 @@ ITEM.functions.UseOnOther = {
                 client:Notify("Вы восстановили "..points.." очков здоровья")
                 target:Notify("Вам восстановили"..points.." очков здоровья")
             end
-            client:SetHealth(math.Clamp(client:Health() + points, 1, client:GetMaxHealth()))
+            target:SetHealth(math.Clamp(target:Health() + points, 1, target:GetMaxHealth()))
             item:Remove()
             return true
         end)

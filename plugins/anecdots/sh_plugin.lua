@@ -107,6 +107,7 @@ ix.command.Add("voiceJoke", {
         local introID = ix.playsound.Play(client, intro)
 
         local sound = Sound(styles[style].joke[math.random(1, #styles[style].joke)])
+        ix.chat.Send(client, "me", "рассказывает анекдот")
         timer.Simple(NewSoundDuration(intro), function()
             -- if new sound is playing, don't play the music
             if (introID != client:GetData("soundID")) then
@@ -148,6 +149,7 @@ ix.command.Add("voiceLaugh", {
 		end
         local sound = styles[style].laugh[math.random(1, #styles[style].laugh)]
         ix.playsound.Play(client, sound)
+        ix.chat.Send(client, "me", "смеется")
 	end
 })
 
@@ -169,5 +171,6 @@ ix.command.Add("voiceReact", {
 		end
         local sound = styles[style].jokeReactionBad[math.random(1, #styles[style].jokeReactionBad)]
         ix.playsound.Play(client, sound)
+        ix.chat.Send(client, "me", "выражает недовольство")
 	end
 })

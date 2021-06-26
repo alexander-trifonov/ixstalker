@@ -97,5 +97,6 @@ ix.command.Add("voiceIdle", {
 
         local sound = styles[style].idle[math.random(1, #styles[style].idle)]
         ix.playsound.Play(client, sound)
+        ix.chat.Send(client, "me", "что-то бубнит себе под нос")
 	end
 })
